@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이주영 홈페이지</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/cmmn.css" />
+  <link rel="stylesheet" href="css/head.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/body.css" />
+  <link rel="stylesheet" href="css/section.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Hello World!</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="">About</a>
+      <a href="board.html">Notice</a>
+      <a href="">Gallery</a>
+      <a href="">Contact</a>
+      <a href="">Login</a>
+    </nav>
+  </header>
+  <div class="wrapper">
+    <table>
+      <colgroup>
+        <col class="no">
+        <col class="title">
+        <col class="writer">
+        <col class="date">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>날짜</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><a href="#">글의 제목 - 1</a></td>
+          <td>거북이</td>
+          <td>2019.10.14</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><a href="#">글의 제목 - 2</a></td>
+          <td>거북이</td>
+          <td>2019.10.14</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><a href="#">글의 제목 - 3</a></td>
+          <td>거북이</td>
+          <td>2019.10.14</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="page-box">
+      <a class="btn" href="#">&lt;&lt;</a>
+      <a class="btn" href="#">&lt;</a>
+
+      <!--  숫자 버튼  -->
+      <a class="btn number" href="#">1</a>
+      <a class="btn number" href="#">2</a>
+      <a class="btn number on" href="#">3</a>
+      <a class="btn number" href="#">4</a>
+      <a class="btn number" href="#">5</a>
+
+      <a class="btn" href="#">&gt;</a>
+      <a class="btn" href="#">&gt;&gt;</a>
+    </div>
+  </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+  $(function () {
+    $(window).scroll(function () {
+      var winTop = $(window).scrollTop();
+      if (winTop >= 30) {
+        $("body").addClass("sticky-header");
+      } else {
+        $("body").removeClass("sticky-header");
+      }
+    });
+  });
+
+  $('.check.all').on('change', function () {
+    $('.check').prop('checked', $(this).prop('checked'));
+  });
+
+  $(document).on('click', '.page-box .btn.number', function () {
+    $('.page-box .btn.number').removeClass('on');
+    $(this).addClass('on');
+    return false;
+  })
+</script>
+
+</html>
