@@ -97,4 +97,12 @@ tr td {
   section p {
     font-size: 12px;
   }
+
+  .mobile-hide {
+    display: none;
+  }
+
+  #th-title {
+    width: 100%;
+  }
 }

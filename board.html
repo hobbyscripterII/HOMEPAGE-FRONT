@@ -30,36 +30,33 @@
       <colgroup>
         <col class="no">
         <col class="title">
-        <col class="writer">
         <col class="date">
       </colgroup>
       <thead>
         <tr>
-          <th>번호</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>날짜</th>
+          <th class="mobile-hide">번호</th>
+          <th id="th-title">제목</th>
+          <th class="mobile-hide">날짜</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td><a href="#">글의 제목 - 1</a></td>
-          <td>거북이</td>
-          <td>2019.10.14</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td><a href="#">글의 제목 - 2</a></td>
-          <td>거북이</td>
-          <td>2019.10.14</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td><a href="#">글의 제목 - 3</a></td>
-          <td>거북이</td>
-          <td>2019.10.14</td>
-        </tr>
+          <!--
+          <tr>
+            <td class="mobile-hide">1</td>
+            <td><a href="#">글의 제목 - 1</a></td>
+            <td class="mobile-hide">2019.10.14</td>
+          </tr>
+          <tr>
+            <td class="mobile-hide">2</td>
+            <td><a href="#">글의 제목 - 2</a></td>
+            <td class="mobile-hide">2019.10.14</td>
+          </tr>
+          <tr>
+            <td class="mobile-hide">3</td>
+            <td><a href="#">글의 제목 - 3</a></td>
+            <td class="mobile-hide">2019.10.14</td>
+          </tr>
+          -->
       </tbody>
     </table>
     <div class="page-box">
@@ -90,6 +87,8 @@
         $("body").removeClass("sticky-header");
       }
     });
+
+    board('B003');
   });
 
   $('.check.all').on('change', function () {
@@ -101,6 +100,69 @@
     $(this).addClass('on');
     return false;
   })
+  function formattedDate(str) {
+    let date = new Date(str);
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let result = `${year}.${month}.${day}`;
+
+    return result;
+  }
+  function board(code) {
+    let searchData = {
+      code : code,
+      // page : 2,
+      search : ''
+    };
+
+    $.ajax({
+      type: 'GET',
+      url: encodeURI('http://localhost/board/list'),
+      dataType: 'text',
+      data: searchData,
+      contentType : 'application/json',
+      success: (data) => {
+        data = JSON.parse(data);
+        let status = data.status;
+        let message = data.message;
+
+        if(status != '200') {
+          alert(message);
+          return;
+        }
+
+        let pagination = data.data.pagination;
+        let searchData = data.data.searchData;
+        let result = data.data.result;
+
+        // console.log('pagination = ', pagination);
+        // console.log('searchData = ', searchData);
+        // console.log('result = ', result);
+
+        let html = null;
+
+        result.forEach((item, idx) => {
+          // console.log('idx = ', idx, ' item = ', item);
+          let api_url = 'http://127.0.0.1/';
+          let date = formattedDate(item.createdAt);
+
+          html += `<tr>
+                    <td class="mobile-hide">${item.rowNumber}</td>
+                    <td><a href="${api_url}board/detail/${item.iboard}">${item.title}</a></td>
+                    <td class="mobile-hide">${date}</td>
+                  </tr>`;
+        });
+
+        $('table tbody').append(html);
+      },
+      error: (error, status, errorThrown) => {
+        console.log('fail-data        : ', error);
+        console.log('fail-status      : ', status);
+        console.log('fail-errorThrown : ', errorThrown);
+      }
+    })
+  }
 </script>
 
 </html>
