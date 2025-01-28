@@ -72,3 +72,68 @@ p {
   line-height: 2;
   color: #7f8c8d;
 }
+
+/* 버튼 효과 */
+.btn {
+  padding: 13px;
+  border: 0;
+  cursor: pointer;
+}
+
+.blue {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.blue:hover {
+  background-color: #2F89C5;
+  transition: 0.5s;
+}
+
+.gray {
+  background-color: #ced4da;
+  color: #333;
+}
+
+.gray:hover {
+  background-color: #adb5bd;
+  transition: 0.5s;
+}
+
+.red {
+  background-color: #ea0000;
+  color: #fff;
+}
+
+.red:hover {
+  background-color: #df0000;
+  transition: 0.5s;
+}
+
+.btn-group {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+}
+
+.btn-group button {
+  margin-left: 10px;
+  width: 90px;
+}
+
+.w100 {
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .btn {
+    padding: 10px;
+  }
+
+  .btn-group button {
+    font-size: 10px;
+    margin-left: 5px;
+    width: 65px;
+  }
+}

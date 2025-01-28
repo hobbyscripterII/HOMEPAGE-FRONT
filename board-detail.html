@@ -12,6 +12,16 @@
   <link rel="stylesheet" href="css/body.css" />
   <link rel="stylesheet" href="css/section.css" />
 </head>
+<style>
+  li {
+    margin-bottom: 20px;
+    color: #7f8c8d;
+  }
+
+  .btn-group {
+    width: auto;
+  }
+</style>
 
 <body>
   <header>
@@ -26,14 +36,20 @@
     </nav>
   </header>
   <div class="wrapper">
-    <section id='steezy'>
-      <h2> This is some steezy stuff</h2>
+    <section>
+      <!-- <h2>This is some steezy stuff</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum enim sunt delectus, reiciendis omnis laudantium animi, et nulla quidem, aliquam aliquid. A consectetur deleniti voluptates eius neque, voluptate voluptatibus nostrum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex libero cupiditate deserunt earum, fuga, ab labore esse animi, nihil est tenetur non delectus perferendis. Maxime accusamus ea rem sint at!</p>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum enim sunt delectus, reiciendis omnis laudantium animi, et nulla quidem, aliquam aliquid. A consectetur deleniti voluptates eius neque, voluptate voluptatibus nostrum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ut aspernatur omnis neque iusto. Veritatis rem ad atque optio perferendis. Dolorum qui consequatur, repellat soluta impedit porro totam molestiae sit.</p>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum enim sunt delectus, reiciendis omnis laudantium animi, et nulla quidem, aliquam aliquid. A consectetur deleniti voluptates eius neque, voluptate voluptatibus nostrum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus iusto, omnis quas, rem minus cupiditate, sunt voluptates minima sint nemo ipsa itaque consequatur dolor, quam necessitatibus vitae. Quod, eaque, quam.</p>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum enim sunt delectus, reiciendis omnis laudantium animi, et nulla quidem, aliquam aliquid. A consectetur deleniti voluptates eius neque, voluptate voluptatibus nostrum!</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum enim sunt delectus, reiciendis omnis laudantium animi, et nulla quidem, aliquam aliquid. A consectetur deleniti voluptates eius neque, voluptate voluptatibus nostrum!</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum enim sunt delectus, reiciendis omnis laudantium animi, et nulla quidem, aliquam aliquid. A consectetur deleniti voluptates eius neque, voluptate voluptatibus nostrum!</p> -->
     </section>
+
+    <div class="btn-group">
+      <button class="btn red w100">DELETE</button>
+      <button class="btn blue w100">UPDATE</button>
+      <button class="btn gray w100">LIST</button>
+    </div>
   </div>
 </body>
 
@@ -41,14 +57,59 @@
 <script src="js/cmmn.js"></script>
 <script>
   $(function () {
-    $(window).scroll(function () {
-      var winTop = $(window).scrollTop();
-      if (winTop >= 30) {
-        $("body").addClass("sticky-header");
-      } else {
-        $("body").removeClass("sticky-header");
-      }
-    });
+    let urlParams = new URL(location.href).searchParams;
+    let board = urlParams.get('board');
+
+    boardDetail(board);
   });
+
+  function boardDetail(board) {
+    let apiUrl = 'http://211.105.146.15:5225/';
+    let url = 'http://127.0.0.1:5500/';
+    board = board || '';
+    
+    if(board == '') {
+      alert('게시글을 찾을 수 없습니다.');
+    }
+
+    $.ajax({
+      type: 'GET',
+      url: encodeURI(`${apiUrl}board/detail/${board}`),
+      dataType: 'text',
+      // data: searchData,
+      contentType : 'application/json',
+      success: (data) => {
+        data = JSON.parse(data);
+        let status = data.status;
+        let message = data.message;
+
+        if(status != '200') {
+          alert(message);
+          return;
+        }
+        
+        data = data.data;
+
+        let html = '';
+        let date = formattedDate(data.createdAt);
+
+        html += `<h2>${data.title}</h2>`;
+        html += `<p class="writer">${data.name}(${date})</p>`;
+        html += data.contents;
+        
+        $('section').append(html);
+
+        let code = data.icode;
+        let $listBtn = $('.btn-group ').find('button:eq(2)');
+
+        $listBtn.attr('onclick', `location.href='${url}board.html?code=${code}'`);
+      },
+      error: (error, status, errorThrown) => {
+        console.log('fail-data        : ', error);
+        console.log('fail-status      : ', status);
+        console.log('fail-errorThrown : ', errorThrown);
+      }
+    })
+  }
 </script>
 </html>

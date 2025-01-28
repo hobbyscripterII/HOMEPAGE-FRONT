@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="css/body.css" />
   <link rel="stylesheet" href="css/section.css" />
 </head>
+<style>
+  .btn-group {
+    margin: auto;
+  }
+</style>
 
 <body>
   <header>
@@ -61,19 +66,9 @@
       </tbody>
     </table>
 
-    <!-- <div class="page-box">
-      <a class="btn" href="#">&lt;&lt;</a>
-      <a class="btn" href="#">&lt;</a>
-
-      <a class="btn number on" href="#">1</a>
-      <a class="btn number" href="#">2</a>
-      <a class="btn number" href="#">3</a>
-      <a class="btn number" href="#">4</a>
-      <a class="btn number" href="#">5</a>
-
-      <a class="btn" href="#">&gt;</a>
-      <a class="btn" href="#">&gt;&gt;</a>
-    </div> -->
+    <div class="btn-group">
+      <button class="btn blue w100">WRITE</button>
+    </div>
   </div>
 </body>
 
@@ -81,15 +76,6 @@
 <script src="js/cmmn.js"></script>
 <script>
   $(function () {
-    $(window).scroll(function () {
-      var winTop = $(window).scrollTop();
-      if (winTop >= 30) {
-        $("body").addClass("sticky-header");
-      } else {
-        $("body").removeClass("sticky-header");
-      }
-    });
-
     board();
   });
 
@@ -107,7 +93,7 @@
     let urlParams = new URL(location.href).searchParams;
     let page = urlParams.get('page') || '1';
     let code = urlParams.get('code') || '';
-    let apiUrl = 'http://127.0.0.1/';
+    let apiUrl = 'http://211.105.146.15:5225/';
     let searchData = {
       code: code,
       page: page,

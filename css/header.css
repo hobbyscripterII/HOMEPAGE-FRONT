@@ -37,7 +37,7 @@ header nav {
 header nav a {
   color: #fff;
   display: inline-block;
-  padding: 10px 15px;
+  padding: 10px 7px;
   line-height: 1;
   text-decoration: none;
   -moz-border-radius: 2px;
@@ -49,6 +49,14 @@ header nav a:hover {
   -moz-box-shadow: 0 0 0 1px #fff;
   -webkit-box-shadow: 0 0 0 1px #fff;
   box-shadow: 0 0 0 1px #fff;
+}
+
+header nav .active {
+  background-color: #fff;
+  -moz-box-shadow: 0 0 0 1px #fff;
+  -webkit-box-shadow: 0 0 0 1px #fff;
+  box-shadow: 0 0 0 1px #fff;
+  color: #333;
 }
 
 @media (max-width: 800px) {

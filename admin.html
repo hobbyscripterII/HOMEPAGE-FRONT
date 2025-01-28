@@ -18,11 +18,11 @@
     <h1>Hello World!</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="">About</a>
-      <a href="board.html">Notice</a>
+      <a href="about.html">About</a>
+      <a href="board.html?code=B001">Notice</a>
       <a href="">Gallery</a>
       <a href="">Contact</a>
-      <a href="">Login</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
   <div class="wrapper">
@@ -87,14 +87,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
   $(function () {
-    $(window).scroll(function () {
-      var winTop = $(window).scrollTop();
-      if (winTop >= 30) {
-        $("body").addClass("sticky-header");
-      } else {
-        $("body").removeClass("sticky-header");
-      }
-    });
   });
 
   $('.check.all').on('change', function () {
