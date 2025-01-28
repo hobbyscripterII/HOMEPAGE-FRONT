@@ -18,11 +18,11 @@
     <h1>Hello World!</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="">About</a>
-      <a href="board.html">Notice</a>
+      <a href="about.html">About</a>
+      <a href="board.html?code=B001">Notice</a>
       <a href="">Gallery</a>
       <a href="">Contact</a>
-      <a href="">Login</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
   <div class="wrapper">
@@ -36,11 +36,12 @@
         <tr>
           <th class="mobile-hide">번호</th>
           <th id="th-title">제목</th>
+          <th class="mobile-hide">작성자</th>
           <th class="mobile-hide">날짜</th>
         </tr>
       </thead>
       <tbody>
-          <!--
+        <!--
           <tr>
             <td class="mobile-hide">1</td>
             <td><a href="#">글의 제목 - 1</a></td>
@@ -59,24 +60,25 @@
           -->
       </tbody>
     </table>
-    <div class="page-box">
+
+    <!-- <div class="page-box">
       <a class="btn" href="#">&lt;&lt;</a>
       <a class="btn" href="#">&lt;</a>
 
-      <!--  숫자 버튼  -->
-      <a class="btn number" href="#">1</a>
+      <a class="btn number on" href="#">1</a>
       <a class="btn number" href="#">2</a>
-      <a class="btn number on" href="#">3</a>
+      <a class="btn number" href="#">3</a>
       <a class="btn number" href="#">4</a>
       <a class="btn number" href="#">5</a>
 
       <a class="btn" href="#">&gt;</a>
       <a class="btn" href="#">&gt;&gt;</a>
-    </div>
+    </div> -->
   </div>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/cmmn.js"></script>
 <script>
   $(function () {
     $(window).scroll(function () {
@@ -88,46 +90,43 @@
       }
     });
 
-    board('B003');
+    board();
   });
 
   $('.check.all').on('change', function () {
     $('.check').prop('checked', $(this).prop('checked'));
   });
 
-  $(document).on('click', '.page-box .btn.number', function () {
-    $('.page-box .btn.number').removeClass('on');
-    $(this).addClass('on');
-    return false;
-  })
-  function formattedDate(str) {
-    let date = new Date(str);
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    let result = `${year}.${month}.${day}`;
+  // $(document).on('click', '.page-box .btn.number', function () {
+  //   $('.page-box .btn.number').removeClass('on');
+  //   $(this).addClass('on');
+  //   return false;
+  // })
 
-    return result;
-  }
-  function board(code) {
+  function board() {
+    let urlParams = new URL(location.href).searchParams;
+    let page = urlParams.get('page') || '1';
+    let code = urlParams.get('code') || '';
+    let apiUrl = 'http://127.0.0.1/';
     let searchData = {
-      code : code,
-      // page : 2,
-      search : ''
+      code: code,
+      page: page,
+      search: ''
     };
 
     $.ajax({
       type: 'GET',
-      url: encodeURI('http://localhost/board/list'),
+      url: encodeURI(`${apiUrl}board/list`),
       dataType: 'text',
       data: searchData,
-      contentType : 'application/json',
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+      xhrFields: { withCredentials: true },
       success: (data) => {
         data = JSON.parse(data);
         let status = data.status;
         let message = data.message;
 
-        if(status != '200') {
+        if (status != '200') {
           alert(message);
           return;
         }
@@ -136,25 +135,58 @@
         let searchData = data.data.searchData;
         let result = data.data.result;
 
-        // console.log('pagination = ', pagination);
-        // console.log('searchData = ', searchData);
-        // console.log('result = ', result);
+        let amount = pagination.amount;
+        let end = pagination.end;
+        let page = pagination.page;
+        let realEnd = pagination.realEnd;
+        let start = pagination.start;
+        let prev = pagination.prev;
+        let next = pagination.next;
 
-        let html = null;
+        let table = '';
+        let pageBox = `<div class="page-box">`;
 
+        let url = `http://127.0.0.1:5500/board.html?code=${code}&page=`;
+
+        if (prev == true) {
+          pageBox += `<a class="btn" href="${url}1">&lt;&lt;</a>
+                      <a class="btn" href="${url}${start - amount}">&lt;</a>`;
+        }
+
+        for (let i = start; i <= end; i++) {
+          if (page == i) {
+            pageBox += `<a class="btn number on" href="${url}${i}">${i}</a>`;
+          } else {
+            pageBox += `<a class="btn number" href="${url}${i}">${i}</a>`;
+          }
+        }
+
+        if (next == true) {
+          pageBox += `<a class="btn" href="${url}${amount + page}">&gt;</a>
+                      <a class="btn" href="${url}${realEnd}">&gt;&gt;</a>`;
+        }
+
+        pageBox += `</div>`;
+
+        $('table').after(pageBox);
+
+        url = 'http://127.0.0.1:5500/board-detail.html?board=';
+        
         result.forEach((item, idx) => {
-          // console.log('idx = ', idx, ' item = ', item);
-          let api_url = 'http://127.0.0.1/';
+          // 1. 실제 매핑 api_url = http://127.0.0.1/board/detail/
+          // 2. 테스트용 매핑 api_url = http://127.0.0.1:5500/board-detail.html?board=
+
           let date = formattedDate(item.createdAt);
 
-          html += `<tr>
-                    <td class="mobile-hide">${item.rowNumber}</td>
-                    <td><a href="${api_url}board/detail/${item.iboard}">${item.title}</a></td>
-                    <td class="mobile-hide">${date}</td>
-                  </tr>`;
+          table += `<tr>
+                      <td class="mobile-hide">${item.rowNumber}</td>
+                      <td><a href="${url}${item.iboard}">${item.title}</a></td>
+                      <td class="mobile-hide">${item.name}</td>
+                      <td class="mobile-hide">${date}</td>
+                    </tr>`;
         });
 
-        $('table tbody').append(html);
+        $('table tbody').append(table);
       },
       error: (error, status, errorThrown) => {
         console.log('fail-data        : ', error);
