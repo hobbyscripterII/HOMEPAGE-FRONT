@@ -1,9 +1,9 @@
 $(function () {
   let currentUrl = window.location.href;
-  
+
   $('nav a').each((idx, item) => {
     let linkUrl = $(item).attr('href');
-
+    
     if(currentUrl.includes(linkUrl) && linkUrl != '') {
       $(item).addClass('active');
     }

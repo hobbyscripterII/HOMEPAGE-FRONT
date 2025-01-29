@@ -94,7 +94,7 @@
     let page = urlParams.get('page') || '1';
     let code = urlParams.get('code') || '';
     // let apiUrl = 'http://127.0.0.1/';
-    let apiUrl = 'http://211.105.146.15:5225/';
+    let apiUrl = 'https://a-p-i.kro.kr/';
     let searchData = {
       code: code,
       page: page,
@@ -133,7 +133,8 @@
         let table = '';
         let pageBox = `<div class="page-box">`;
 
-        let url = `http://127.0.0.1:5500/board.html?code=${code}&page=`;
+        let url = `https://jy-home.kro.kr/board.html?code=${code}&page=`;
+        // let url = `http://127.0.0.1:5500/board.html?code=${code}&page=`;
 
         if (prev == true) {
           pageBox += `<a class="btn" href="${url}1">&lt;&lt;</a>
@@ -157,7 +158,7 @@
 
         $('table').after(pageBox);
 
-        url = 'http://127.0.0.1:5500/board-detail.html?board=';
+        url = 'https://jy-home.kro.kr/board-detail.html?board=';
         
         result.forEach((item, idx) => {
           // 1. 실제 매핑 api_url = http://127.0.0.1/board/detail/
@@ -183,5 +184,4 @@
     })
   }
 </script>
-
 </html>

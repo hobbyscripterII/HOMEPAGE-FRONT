@@ -93,6 +93,11 @@ tr td {
   font-size: 12px;
   color: #333;
 }
+
+figure > img {
+  max-width: 760px;
+}
+
 /* 로그인 */
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
@@ -219,5 +224,13 @@ tr td {
 
   .form {
     margin: 0px 15px 100px;
+  }
+
+  .writer {
+    width: auto;
+  }
+
+  figure > img {
+    max-width: 250px;
   }
 }
