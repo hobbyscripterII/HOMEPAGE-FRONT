@@ -10,9 +10,10 @@ $(function () {
   });
 
   $(window).scroll(function () {
-    let winTop = $(window).scrollTop();
+    let $winTop = $(window).scrollTop();
+    let $lastScrollTop = 0;
     
-    if (winTop >= 200) {
+    if ($winTop > $lastScrollTop) {
       $("body").addClass("sticky-header");
     } else {
       $("body").removeClass("sticky-header");
