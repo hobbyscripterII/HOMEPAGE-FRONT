@@ -25,8 +25,8 @@
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="board.html?code=B001">Notice</a>
-      <a href="">Gallery</a>
-      <a href="">Contact</a>
+      <a href="board.html?code=B003">Gallery</a>
+      <a href="board.html?code=B006">Design</a>
       <a href="login.html">Login</a>
     </nav>
   </header>
@@ -35,6 +35,7 @@
       <colgroup>
         <col class="no">
         <col class="title">
+        <col class="writer">
         <col class="date">
       </colgroup>
       <thead>
@@ -46,23 +47,6 @@
         </tr>
       </thead>
       <tbody>
-        <!--
-          <tr>
-            <td class="mobile-hide">1</td>
-            <td><a href="#">글의 제목 - 1</a></td>
-            <td class="mobile-hide">2019.10.14</td>
-          </tr>
-          <tr>
-            <td class="mobile-hide">2</td>
-            <td><a href="#">글의 제목 - 2</a></td>
-            <td class="mobile-hide">2019.10.14</td>
-          </tr>
-          <tr>
-            <td class="mobile-hide">3</td>
-            <td><a href="#">글의 제목 - 3</a></td>
-            <td class="mobile-hide">2019.10.14</td>
-          </tr>
-          -->
       </tbody>
     </table>
 
@@ -73,6 +57,7 @@
 </body>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/config.js"></script>
 <script src="js/cmmn.js"></script>
 <script>
   $(function () {
@@ -83,18 +68,10 @@
     $('.check').prop('checked', $(this).prop('checked'));
   });
 
-  // $(document).on('click', '.page-box .btn.number', function () {
-  //   $('.page-box .btn.number').removeClass('on');
-  //   $(this).addClass('on');
-  //   return false;
-  // })
-
   function board() {
     let urlParams = new URL(location.href).searchParams;
     let page = urlParams.get('page') || '1';
     let code = urlParams.get('code') || '';
-    // let apiUrl = 'http://127.0.0.1/';
-    let apiUrl = 'https://a-p-i.kro.kr/';
     let searchData = {
       code: code,
       page: page,
@@ -133,42 +110,35 @@
         let table = '';
         let pageBox = `<div class="page-box">`;
 
-        let url = `https://jy-home.kro.kr/board.html?code=${code}&page=`;
-        // let url = `http://127.0.0.1:5500/board.html?code=${code}&page=`;
-
+        // 페이지네이션 생성
         if (prev == true) {
-          pageBox += `<a class="btn" href="${url}1">&lt;&lt;</a>
-                      <a class="btn" href="${url}${start - amount}">&lt;</a>`;
+          pageBox += `<a class="btn" href="${url}board.html?code=${code}&page=1">&lt;&lt;</a>
+                      <a class="btn" href="${url}board.html?code=${code}&page=${start - amount}">&lt;</a>`;
         }
 
         for (let i = start; i <= end; i++) {
           if (page == i) {
-            pageBox += `<a class="btn number on" href="${url}${i}">${i}</a>`;
+            pageBox += `<a class="btn number on" href="${url}board.html?code=${code}&page=${i}">${i}</a>`;
           } else {
-            pageBox += `<a class="btn number" href="${url}${i}">${i}</a>`;
+            pageBox += `<a class="btn number" href="${url}board.html?code=${code}&page=${i}">${i}</a>`;
           }
         }
 
         if (next == true) {
-          pageBox += `<a class="btn" href="${url}${amount + page}">&gt;</a>
-                      <a class="btn" href="${url}${realEnd}">&gt;&gt;</a>`;
+          pageBox += `<a class="btn" href="${url}board.html?code=${code}&page=${amount + page}">&gt;</a>
+                      <a class="btn" href="${url}board.html?code=${code}&page=${realEnd}">&gt;&gt;</a>`;
         }
 
         pageBox += `</div>`;
 
         $('table').after(pageBox);
 
-        url = 'https://jy-home.kro.kr/board-detail.html?board=';
-        
         result.forEach((item, idx) => {
-          // 1. 실제 매핑 api_url = http://127.0.0.1/board/detail/
-          // 2. 테스트용 매핑 api_url = http://127.0.0.1:5500/board-detail.html?board=
-
           let date = formattedDate(item.createdAt);
 
           table += `<tr>
                       <td class="mobile-hide">${item.rowNumber}</td>
-                      <td><a href="${url}${item.iboard}">${item.title}</a></td>
+                      <td><a href="${url}board-detail.html?code=${code}&page=${page}&board=${item.iboard}">${item.title}</a></td>
                       <td class="mobile-hide">${item.name}</td>
                       <td class="mobile-hide">${date}</td>
                     </tr>`;

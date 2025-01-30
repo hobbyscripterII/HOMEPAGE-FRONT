@@ -30,8 +30,8 @@
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="board.html?code=B001">Notice</a>
-      <a href="">Gallery</a>
-      <a href="">Contact</a>
+      <a href="board.html?code=B003">Gallery</a>
+      <a href="board.html?code=B006">Design</a>
       <a href="login.html">Login</a>
     </nav>
   </header>
@@ -54,22 +54,25 @@
 </body>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/config.js"></script>
 <script src="js/cmmn.js"></script>
 <script>
   $(function () {
     let urlParams = new URL(location.href).searchParams;
     let board = urlParams.get('board');
+    let page = urlParams.get('page') || '1';
+    let code = urlParams.get('code') || '';
+
+    window.searchData = {
+      code: code,
+      page: page,
+      search: ''
+    };
 
     boardDetail(board);
   });
 
   function boardDetail(board) {
-    let apiUrl = 'https://a-p-i.kro.kr/';
-    let url = 'https://jy-home.kro.kr/';
-    /*
-    let apiUrl = 'http://211.105.146.15:5225/';
-    let url = 'http://127.0.0.1:5500/';
-    */
     board = board || '';
     
     if(board == '') {
@@ -103,10 +106,10 @@
         
         $('section').append(html);
 
-        let code = data.icode;
+        code = data.icode;
         let $listBtn = $('.btn-group ').find('button:eq(2)');
 
-        $listBtn.attr('onclick', `location.href='${url}board.html?code=${code}'`);
+        $listBtn.attr('onclick', `location.href='${url}board.html?code=${searchData.code}&page=${searchData.page}'`);
       },
       error: (error, status, errorThrown) => {
         console.log('fail-data        : ', error);

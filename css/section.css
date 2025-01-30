@@ -98,6 +98,29 @@ figure > img {
   max-width: 760px;
 }
 
+col.no {
+  width: 15%;
+}
+
+col.title {
+  width: 50%;
+}
+
+col.writer {
+  width: 15%;
+}
+
+col.date {
+  width: 20%;
+}
+
+td:nth-child(2) {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* 로그인 */
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
@@ -226,11 +249,15 @@ figure > img {
     margin: 0px 15px 100px;
   }
 
-  .writer {
+  col.writer {
     width: auto;
   }
 
   figure > img {
     max-width: 100%;
+  }
+
+  td:nth-child(2) {
+    max-width: 0;
   }
 }
