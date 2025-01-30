@@ -15,10 +15,6 @@ a {
   color: #333;
 }
 
-a:hover {
-  /* color: #6199ff; */
-}
-
 /* 게시판 */
 table {
   width: 80%;
@@ -224,6 +220,15 @@ td:nth-child(2) {
   color: #ef3b3a;
 }
 
+/* 메인 */
+.architecture {
+  padding-left: 10px;
+  border-left: 3px solid #333;
+  border-radius: 5px;
+  color: #333;
+  line-height: 2;
+}
+
 @media (max-width: 800px) {
   section h2 {
     font-size: 25px;
@@ -259,5 +264,9 @@ td:nth-child(2) {
 
   td:nth-child(2) {
     max-width: 0;
+  }
+
+  .architecture {
+    font-size: 12px;
   }
 }

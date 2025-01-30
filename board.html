@@ -145,6 +145,9 @@
         });
 
         $('table tbody').append(table);
+
+        let $wrtBtn = $('.btn-group ').find('button:eq(0)');
+        $wrtBtn.hide();
       },
       error: (error, status, errorThrown) => {
         console.log('fail-data        : ', error);
