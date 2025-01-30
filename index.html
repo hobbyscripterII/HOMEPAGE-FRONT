@@ -14,16 +14,19 @@
   <link rel="stylesheet" href="css/footer.css" />
 </head>
 <style>
-  .wrapper {
-    height: 70vh;
+  .footer-distributed {
+    margin-top: 200px;
   }
+
+  section img {
+  max-width: 760px;
+}
 </style>
 <body>
   <header>
     <h1>Hello World!</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="about.html">About</a>
       <a href="board.html?code=B001">Notice</a>
       <a href="board.html?code=B003">Gallery</a>
       <a href="board.html?code=B006">Design</a>
@@ -31,21 +34,22 @@
     </nav>
   </header>
   <div class="wrapper">
-    <section id='steezy'>
-      <h2>HELLO WORLD!</h2>
-      <p>설날에 심심해서 만든 CSR 방식의 개인 홈페이지</p>
-      <div class="architecture">
-        <ul>
-          <li><strong>Rendering </strong>CSR</li>
-          <li><strong>Frontend </strong>HTML, JavaScript, jQuery, AJAX</li>
-          <li><strong>Backend </strong>Java, Spring Boot 3.x, Rest API</li>
-          <li><strong>Reverse Proxy </strong>Apache2</li>
-          <li><strong>Deploy </strong>RaspberryPI5, Docker</li>
-          <li><strong>Storage </strong>Mounted HDD</li>
-          <li><strong>UI Reference </strong>CodePen</li>
-        </ul>
-      </div>
-    </section>
+    <div class="wrapper">
+      <section id='steezy'>
+        <h2>About</h2>
+        <img src="static-img/img-kirby.png">
+        <p><strong>PS</strong></p>
+        <p>해당 홈페이지는 설날 때 만들었다.</p>
+        <p>나중에 react 공부하면 적용해볼려고 csr 방식으로 만들긴 했는데 언제 공부할지는 미지수..</p>
+        <p>만들어보고 싶은거나 공부하고 싶은 거 있으면 알아서 공부는 하는 편이다.</p>
+        <p>현재까지 찍먹해본 것 ☞</p>
+        <p>미니 PC 관련해서 RaspberryPI, 배포 관련해서 Docker(Image, Container, Docker-compose, Dockerfile), Apache ProxyPass, Apache Session Clustering, Apache mod_jk, SSL 인증서 발급 관련해서 Let's Encrypt, 모니터링 관련해서 Linux Prometheus & Grafana(Monitoring), Linux 파일 공유 관련해서 Samba, 기타 외 RaspberryPI 하드디스크 마운트 등 ...</p>
+        <img src="static-img/img-ras1.jpg">
+        <img src="static-img/img-ras2.jpg">
+        <img src="static-img/img-docker.png">
+        <img src="static-img/img-grafana.png">
+      </section>
+    </div>
   </div>
 
   <footer class="footer-distributed">
