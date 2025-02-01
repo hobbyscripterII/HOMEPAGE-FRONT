@@ -136,4 +136,8 @@ p {
     margin-left: 5px;
     width: 65px;
   }
+
+  li {
+    font-size: 12px;
+  }
 }

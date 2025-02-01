@@ -18,6 +18,10 @@
     margin: auto;
   }
 
+  .btn-group button {
+    display: none;
+  }
+  
   .wrapper {
     height: 65vh;
   }
@@ -29,6 +33,7 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="board.html?code=B001">Notice</a>
+      <a href="board.html?code=RSS">Study</a>
       <a href="board.html?code=B003">Gallery</a>
       <a href="board.html?code=B006">Design</a>
       <a href="login.html">Login</a>
@@ -81,6 +86,7 @@
 </body>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/rss-parser@3.13.0/dist/rss-parser.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/cmmn.js"></script>
 <script>
@@ -103,82 +109,102 @@
     };
 
     $.ajax({
-      type: 'GET',
-      url: encodeURI(`${apiUrl}board/list`),
-      dataType: 'text',
-      data: searchData,
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      xhrFields: { withCredentials: true },
-      success: (data) => {
-        data = JSON.parse(data);
-        let status = data.status;
-        let message = data.message;
-
-        if (status != '200') {
-          alert(message);
-          return;
-        }
-
-        let pagination = data.data.pagination;
-        let searchData = data.data.searchData;
-        let result = data.data.result;
-
-        let amount = pagination.amount;
-        let end = pagination.end;
-        let page = pagination.page;
-        let realEnd = pagination.realEnd;
-        let start = pagination.start;
-        let prev = pagination.prev;
-        let next = pagination.next;
-
-        let table = '';
-        let pageBox = `<div class="page-box">`;
-
-        // 페이지네이션 생성
-        if (prev == true) {
-          pageBox += `<a class="btn" href="${url}board.html?code=${code}&page=1">&lt;&lt;</a>
-                      <a class="btn" href="${url}board.html?code=${code}&page=${start - amount}">&lt;</a>`;
-        }
-
-        for (let i = start; i <= end; i++) {
-          if (page == i) {
-            pageBox += `<a class="btn number on" href="${url}board.html?code=${code}&page=${i}">${i}</a>`;
-          } else {
-            pageBox += `<a class="btn number" href="${url}board.html?code=${code}&page=${i}">${i}</a>`;
+        type: 'GET',
+        url: encodeURI(`${apiUrl}board/list`),
+        dataType: 'text',
+        data: searchData,
+        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+        xhrFields: { withCredentials: true },
+        success: (data) => {
+          data = JSON.parse(data);
+          let status = data.status;
+          let message = data.message;
+  
+          if (status != '200') {
+            alert(message);
+            return;
           }
+  
+          let pagination = data.data.pagination;
+          let searchData = data.data.searchData;
+          let result = data.data.result;
+  
+          let amount = pagination.amount;
+          let end = pagination.end;
+          let page = pagination.page;
+          let realEnd = pagination.realEnd;
+          let start = pagination.start;
+          let prev = pagination.prev;
+          let next = pagination.next;
+  
+          let table = '';
+          let pageBox = `<div class="page-box">`;
+  
+          // 페이지네이션 생성
+          if (prev == true) {
+            pageBox += `<a class="btn" href="${url}board.html?code=${code}&page=1">&lt;&lt;</a>
+                        <a class="btn" href="${url}board.html?code=${code}&page=${start - amount}">&lt;</a>`;
+          }
+  
+          for (let i = start; i <= end; i++) {
+            if (page == i) {
+              pageBox += `<a class="btn number on" href="${url}board.html?code=${code}&page=${i}">${i}</a>`;
+            } else {
+              pageBox += `<a class="btn number" href="${url}board.html?code=${code}&page=${i}">${i}</a>`;
+            }
+          }
+  
+          if (next == true) {
+            pageBox += `<a class="btn" href="${url}board.html?code=${code}&page=${amount + page}">&gt;</a>
+                        <a class="btn" href="${url}board.html?code=${code}&page=${realEnd}">&gt;&gt;</a>`;
+          }
+  
+          pageBox += `</div>`;
+  
+          $('table').after(pageBox);
+  
+          if(code == 'RSS') {
+            table += `<tr>
+                        <td class="mobile-hide" style="font-weight: bold">알림</td>
+                        <td style="text-align: left; padding: 10px 5px; font-weight: bold">Tistory RSS 연동 게시판입니다.</td>
+                        <td class="mobile-hide" style="font-weight: bold">이주영</td>
+                        <td class="mobile-hide" style="font-weight: bold">2025.2.1</td>
+                      </tr>`;
+
+            result.forEach((item, idx) => {
+            let date = formattedDate(item.createdAt);
+  
+            table += `<tr>
+                        <td class="mobile-hide">${item.rowNumber}</td>
+                        <td style="text-align: left; padding: 10px 5px"><a href="${item.link}" target="_blank">${item.title}</a></td>
+                        <td class="mobile-hide">${item.name}</td>
+                        <td class="mobile-hide">${date}</td>
+                      </tr>`;
+          });
+          } else {
+            result.forEach((item, idx) => {
+            let date = formattedDate(item.createdAt);
+  
+            table += `<tr>
+                        <td class="mobile-hide">${item.rowNumber}</td>
+                        <td><a href="${url}board-detail.html?code=${code}&page=${page}&board=${item.iboard}">${item.title}</a></td>
+                        <td class="mobile-hide">${item.name}</td>
+                        <td class="mobile-hide">${date}</td>
+                      </tr>`;
+          });
+          }
+  
+          $('table tbody').append(table);
+  
+          // let $wrtBtn = $('.btn-group ').find('button:eq(0)');
+          // $wrtBtn.css('display', 'block');
+        },
+        error: (error, status, errorThrown) => {
+          console.log('fail-data        : ', error);
+          console.log('fail-status      : ', status);
+          console.log('fail-errorThrown : ', errorThrown);
         }
-
-        if (next == true) {
-          pageBox += `<a class="btn" href="${url}board.html?code=${code}&page=${amount + page}">&gt;</a>
-                      <a class="btn" href="${url}board.html?code=${code}&page=${realEnd}">&gt;&gt;</a>`;
-        }
-
-        pageBox += `</div>`;
-
-        $('table').after(pageBox);
-
-        result.forEach((item, idx) => {
-          let date = formattedDate(item.createdAt);
-
-          table += `<tr>
-                      <td class="mobile-hide">${item.rowNumber}</td>
-                      <td><a href="${url}board-detail.html?code=${code}&page=${page}&board=${item.iboard}">${item.title}</a></td>
-                      <td class="mobile-hide">${item.name}</td>
-                      <td class="mobile-hide">${date}</td>
-                    </tr>`;
-        });
-
-        $('table tbody').append(table);
-
-        let $wrtBtn = $('.btn-group ').find('button:eq(0)');
-        $wrtBtn.hide();
-      },
-      error: (error, status, errorThrown) => {
-        console.log('fail-data        : ', error);
-        console.log('fail-status      : ', status);
-        console.log('fail-errorThrown : ', errorThrown);
-      }
-    })
+      })
   }
 </script>
 </html>

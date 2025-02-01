@@ -229,6 +229,10 @@ td:nth-child(2) {
   line-height: 2;
 }
 
+section img {
+  max-width: 760px;
+}
+
 @media (max-width: 800px) {
   section h2 {
     font-size: 25px;
@@ -268,5 +272,9 @@ td:nth-child(2) {
 
   .architecture {
     font-size: 12px;
+  }
+
+  section img {
+    max-width: 100%;
   }
 }
